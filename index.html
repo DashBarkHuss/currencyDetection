@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    Open the console so see fetch responses
+    <script>
+      (async () => {
+        /// get the clients country code based on the ip
+        const countryCode = await fetch("https://extreme-ip-lookup.com/json/")
+          .then((res) => res.json())
+          .then((response) => {
+            return response.countryCode;
+          })
+          .catch((data, status) => {
+            console.log("Request failed");
+          });
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        // send the country code to the server where we will also detect the browser's preferred language located in the acceptsLanguages request header
+        const country = await fetch("http://localhost:3000/locale", {
+          method: "POST",
+          body: JSON.stringify({ countryCode }),
+          headers,
+        });
+
+        // get the country code and language code from the server that we stored in the session
+        await fetch("http://localhost:3000/locale").then((res) =>
+          res
+            .text()
+            .then(function (data) {
+              console.log(data);
+            })
+            .catch(console.log)
+        );
+
+        // display a 9000 in correct currency
+        await fetch("http://localhost:3000/displayPriceExample").then((res) =>
+          res
+            .text()
+            .then(function (data) {
+              console.log(data);
+            })
+            .catch(console.log)
+        );
+      })();
+    </script>
+  </body>
+</html>
