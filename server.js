@@ -13,8 +13,8 @@ app.use(cors());
 var sess = {
   secret: "keyboard cat",
   cookie: {},
-  resave: false,
-  saveUninitialized: true,
+  resave: false, // I'm not actually sure...
+  saveUninitialized: true, // what these two should be set to
 };
 
 if (app.get("env") === "production") {
